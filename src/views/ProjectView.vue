@@ -1,0 +1,205 @@
+<template>
+  <div v-if="project">
+    <!-- Full-bleed hero -->
+    <section class="proj-hero" :style="{ background: `linear-gradient(160deg, ${project.thumb}ee 0%, ${project.thumb} 100%)` }">
+      <div class="proj-hero__overlay" />
+      <div class="container proj-hero__inner">
+        <RouterLink to="/portfolio" class="proj-hero__back">← Back to Portfolio</RouterLink>
+        <span class="proj-hero__cat" :style="{ color: project.accent }">{{ project.category }}</span>
+        <h1 class="proj-hero__title">{{ project.title }}</h1>
+        <p class="proj-hero__client">{{ project.client }} · {{ project.year }}</p>
+      </div>
+    </section>
+
+    <!-- Content -->
+    <section class="section">
+      <div class="container proj-body">
+
+        <!-- Left: main content -->
+        <main class="proj-main">
+          <div ref="mainContent">
+            <h2 class="proj-section-title">Project Overview</h2>
+            <p class="body-md">{{ project.fullDesc }}</p>
+
+            <div class="proj-results-box">
+              <h2 class="proj-section-title">
+                <span class="proj-results-icon" aria-hidden="true">📈</span> Key Results
+              </h2>
+              <ul class="proj-results-list" role="list">
+                <li v-for="r in project.results" :key="r" class="proj-result-item">
+                  <span class="result-dot" aria-hidden="true" />{{ r }}
+                </li>
+              </ul>
+            </div>
+
+            <h2 class="proj-section-title" style="margin-top:2.5rem">Technologies Used</h2>
+            <div class="proj-tech-tags">
+              <span class="vk-badge" v-for="t in project.tags" :key="t">{{ t }}</span>
+            </div>
+          </div>
+        </main>
+
+        <!-- Right: sidebar -->
+        <aside class="proj-sidebar">
+          <!-- Project info -->
+          <div class="sidebar-card vk-card" ref="sidebarCard">
+            <h3 class="sidebar-card__title">Project Details</h3>
+            <dl class="sidebar-info">
+              <div class="sidebar-info__row" v-for="row in infoRows" :key="row.label">
+                <dt class="sidebar-info__label">{{ row.label }}</dt>
+                <dd class="sidebar-info__val">{{ row.val }}</dd>
+              </div>
+            </dl>
+          </div>
+
+          <!-- CTA -->
+          <div class="sidebar-cta vk-card" ref="sidebarCta">
+            <h3 class="sidebar-cta__title">Interested in a similar project?</h3>
+            <p class="body-sm" style="margin-bottom:1.25rem">Let's discuss your goals. The first consultation is always free.</p>
+            <RouterLink to="/book" class="btn-navy btn" style="width:100%;justify-content:center">Book Consultation →</RouterLink>
+          </div>
+
+          <!-- Other projects -->
+          <div class="sidebar-card vk-card" ref="sidebarOther">
+            <h3 class="sidebar-card__title">More Projects</h3>
+            <div class="other-projects">
+              <RouterLink
+                v-for="p in otherProjects"
+                :key="p.id"
+                :to="`/portfolio/${p.id}`"
+                class="other-proj"
+                :aria-label="`View ${p.title}`"
+              >
+                <div class="other-proj__thumb" :style="{ background: p.thumb }" />
+                <div class="other-proj__info">
+                  <div class="other-proj__title">{{ p.title }}</div>
+                  <div class="other-proj__cat" :style="{ color: p.accent }">{{ p.category }}</div>
+                </div>
+              </RouterLink>
+            </div>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="cta-strip">
+      <div class="container cta-strip__inner">
+        <h2 class="heading-lg" style="color:#fff">
+          Ready to build<br/><em style="color:var(--gold);font-style:normal">something like this?</em>
+        </h2>
+        <RouterLink to="/book" class="btn-gold btn btn-lg">Book Free Consultation →</RouterLink>
+      </div>
+    </section>
+  </div>
+
+  <!-- Not found -->
+  <div v-else class="not-found">
+    <div class="not-found__icon" aria-hidden="true">◈</div>
+    <h1 class="heading-lg">Project not found</h1>
+    <RouterLink to="/portfolio" class="btn-navy btn" style="margin-top:1.5rem">← Back to Portfolio</RouterLink>
+  </div>
+</template>
+
+<script setup>
+import { ref, computed, onMounted } from 'vue'
+import { useRoute, useRouter, RouterLink } from 'vue-router'
+import { usePortfolioStore } from '@/stores/portfolio.js'
+import { useGsap } from '@/composables/useGsap.js'
+import { useSeo }  from '@/composables/useSeo.js'
+
+const route   = useRoute()
+const router  = useRouter()
+const store   = usePortfolioStore()
+const { heroSequence, scrollReveal, staggerReveal } = useGsap()
+
+const project = computed(() => store.getById(route.params.id))
+
+const otherProjects = computed(() =>
+  store.projects.filter(p => p.id !== route.params.id).slice(0, 3)
+)
+
+const infoRows = computed(() => project.value ? [
+  { label: 'Client',    val: project.value.client },
+  { label: 'Category',  val: project.value.category },
+  { label: 'Year',      val: project.value.year },
+  { label: 'Stack',     val: project.value.tags.slice(0, 3).join(', ') },
+] : [])
+
+// SEO
+if (project.value) {
+  useSeo({
+    title: `${project.value.title} — Case Study`,
+    description: project.value.desc,
+    canonical: `/portfolio/${project.value.id}`,
+  })
+}
+
+const mainContent  = ref(null)
+const sidebarCard  = ref(null)
+const sidebarCta   = ref(null)
+const sidebarOther = ref(null)
+
+onMounted(async () => {
+  await store.fetchProjects()
+  if (!project.value) return
+  scrollReveal(mainContent.value)
+  staggerReveal([sidebarCard.value, sidebarCta.value, sidebarOther.value].filter(Boolean), { y: 30, stagger: 0.14 })
+})
+</script>
+
+<style scoped>
+/* Hero */
+.proj-hero { min-height: 420px; position: relative; display: flex; align-items: flex-end; }
+.proj-hero__overlay { position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0.75) 100%); }
+.proj-hero__inner { position: relative; z-index: 1; padding-top: calc(var(--nav-h) + 3rem); padding-bottom: 3.5rem; display: flex; flex-direction: column; gap: 0.65rem; }
+.proj-hero__back  { display: inline-flex; align-items: center; gap: 0.4rem; font-size: 0.85rem; color: rgba(255,255,255,0.65); text-decoration: none; transition: color 0.18s; width: fit-content; }
+.proj-hero__back:hover { color: #fff; }
+.proj-hero__cat   { font-family: 'DM Mono', monospace; font-size: 0.72rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; }
+.proj-hero__title { font-family: 'Syne', sans-serif; font-size: clamp(1.8rem, 4vw, 3rem); font-weight: 800; color: #fff; letter-spacing: -0.03em; line-height: 1.1; max-width: 750px; }
+.proj-hero__client{ font-family: 'DM Mono', monospace; font-size: 0.78rem; color: rgba(255,255,255,0.55); }
+
+/* Body */
+.proj-body { display: grid; grid-template-columns: 1fr 320px; gap: 3.5rem; align-items: start; }
+.proj-main { }
+.proj-section-title { font-family: 'Syne', sans-serif; font-size: 1.15rem; font-weight: 700; color: var(--navy); margin-bottom: 1rem; }
+.proj-results-box { background: rgba(201,168,76,0.06); border: 1px solid rgba(201,168,76,0.2); border-radius: 14px; padding: 1.5rem; margin: 2rem 0; }
+.proj-results-icon { margin-right: 0.4rem; }
+.proj-results-list { list-style: none; padding: 0; display: flex; flex-direction: column; gap: 0.65rem; margin-top: 0.75rem; }
+.proj-result-item  { display: flex; align-items: center; gap: 0.75rem; font-size: 0.9rem; color: var(--body-text); }
+.result-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--gold); flex-shrink: 0; box-shadow: 0 0 8px var(--gold); }
+.proj-tech-tags { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+
+/* Sidebar */
+.proj-sidebar { display: flex; flex-direction: column; gap: 1.25rem; }
+.sidebar-card { padding: 1.5rem; }
+.sidebar-card__title { font-family: 'Syne', sans-serif; font-size: 0.95rem; font-weight: 700; color: var(--navy); margin-bottom: 1.1rem; }
+.sidebar-info { display: flex; flex-direction: column; }
+.sidebar-info__row { display: flex; justify-content: space-between; gap: 0.5rem; padding: 0.55rem 0; border-bottom: 1px solid var(--border); }
+.sidebar-info__row:last-child { border-bottom: none; }
+.sidebar-info__label { font-family: 'DM Mono', monospace; font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--dim); }
+.sidebar-info__val   { font-size: 0.85rem; font-weight: 600; color: var(--navy); text-align: right; }
+.sidebar-cta { padding: 1.5rem; background: var(--navy); border-color: var(--navy); }
+.sidebar-cta__title { font-family: 'Syne', sans-serif; font-size: 0.95rem; font-weight: 700; color: #fff; margin-bottom: 0.5rem; }
+.sidebar-cta p { color: rgba(255,255,255,0.65) !important; }
+.other-projects { display: flex; flex-direction: column; gap: 0; }
+.other-proj {
+  display: flex; gap: 0.75rem; align-items: center;
+  padding: 0.75rem 0.5rem; border-bottom: 1px solid var(--border);
+  cursor: pointer; text-decoration: none; border-radius: 8px;
+  transition: background 0.18s; margin: 0 -0.5rem;
+}
+.other-proj:last-child { border-bottom: none; }
+.other-proj:hover { background: var(--cream); }
+.other-proj__thumb { width: 42px; height: 42px; border-radius: 8px; flex-shrink: 0; }
+.other-proj__title { font-size: 0.83rem; font-weight: 600; color: var(--navy); line-height: 1.3; margin-bottom: 0.15rem; }
+.other-proj__cat   { font-family: 'DM Mono', monospace; font-size: 0.65rem; font-weight: 600; }
+
+.cta-strip { background: var(--navy); padding: 5rem 1.5rem; }
+.cta-strip__inner { display: flex; align-items: center; justify-content: space-between; gap: 3rem; flex-wrap: wrap; }
+
+.not-found { min-height: 60vh; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 4rem; }
+.not-found__icon { font-size: 3rem; color: var(--dim); margin-bottom: 1rem; }
+
+@media (max-width: 900px) { .proj-body { grid-template-columns: 1fr; } }
+</style>
