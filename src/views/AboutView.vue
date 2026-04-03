@@ -181,10 +181,10 @@ const team = [
     skills: ['Cloud','Springboot', 'Docker', 'Kubernetes', 'Backend Engineering']
   },
   {
-    name: 'Maggie',
+    name: 'Magrgaret Thiga',
     initials: 'MG',
     role: 'Software Developer ',
-    bio: 'Specializes in Software Development, building and deploying applications that drive business value.',
+    bio: 'Specializes in Software Development, Graphical User Interface design, and deploying applications that drive business value.',
     bg: 'linear-gradient(135deg,#A8882E,#C9A84C)',
     skills: ['Node', 'TypeScript', 'JavaScript', 'Software Development']
   }
