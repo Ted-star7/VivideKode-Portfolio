@@ -27,7 +27,7 @@
             aria-label="Established Nairobi 2024"
           >
             <span class="eyebrow-bar" aria-hidden="true" />
-            <span class="eyebrow">Est. Nairobi · 2024</span>
+            <span class="eyebrow">Est. Nairobi · 2026</span>
           </div>
 
           <h1 class="hero__h1" id="hero-heading" ref="heroTitle">
