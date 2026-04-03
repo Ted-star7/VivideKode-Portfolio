@@ -74,7 +74,7 @@ export const useContactStore = defineStore('contact', () => {
       console.error('[ContactStore] submit failed:', err)
       error.value = err.response?.data?.message ||
                     err.message ||
-                    'Unable to send message. Please email hello@vividkode.dev directly.'
+                    'Unable to send message. Please email vividkode@gmail.com directly.'
       return false
     } finally {
       loading.value = false

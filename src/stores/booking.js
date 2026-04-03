@@ -80,7 +80,7 @@ export const useBookingStore = defineStore('booking', () => {
       console.error('[BookingStore] submit failed:', err)
       error.value = err.response?.data?.message || 
                     err.message || 
-                    'Unable to submit consultation request. Please email hello@vividkode.dev directly.'
+                    'Unable to submit consultation request. Please email vividkode@gmail.com directly.'
       return false
     } finally {
       loading.value = false

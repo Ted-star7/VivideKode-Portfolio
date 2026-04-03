@@ -224,7 +224,7 @@ onMounted(() => {
   display: flex; align-items: center; justify-content: center;
   font-size: 1.5rem; border: 1px solid;
 }
-.svc-detail-card__cat  { }
+/* .svc-detail-card__cat  { } */
 .svc-detail-card__title {
   font-family: 'Syne', sans-serif; font-size: 1.15rem; font-weight: 700;
   color: var(--navy); line-height: 1.3;

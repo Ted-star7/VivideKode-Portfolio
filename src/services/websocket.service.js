@@ -4,7 +4,7 @@ const REPLIES = [
   "Great question! We start every engagement with a discovery session to understand your goals fully. Want me to help schedule one?",
   "We tailor every proposal individually — projects typically start from $5,000. Can you share more details for a better estimate?",
   "Our team is usually ready to kick off within 2–3 weeks. I can connect you directly with our lead engineer — call or email?",
-  "You can also reach us at hello@vividkode.dev or book a consultation from the menu. We always respond within 24 hours!",
+  "You can also reach us at vividkode@gmail.com or book a consultation from the menu. We always respond within 24 hours!",
 ]
 
 export class SimulatedWS {

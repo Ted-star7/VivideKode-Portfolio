@@ -3,7 +3,7 @@ import axios from "axios";
 // export const apiClient = axios.create({
 //   baseURL:
 //     import.meta.env.VITE_API_BASE_URL || "https://vividekode-7070.onrender.com",
-  
+
 //   headers: { "Content-Type": "application/json" },
 // });
 
@@ -30,8 +30,8 @@ export const contactApi = {
   send: (data) => apiClient.post("/api/open/contact", data),
 };
 export const visionMissionApi = {
-  getAll: () => apiClient.get("/api/vission-mission"),
-  getById: (id) => apiClient.get(`/api/vission-mission/${id}`),
+  getAll: () => apiClient.get("/api/open/vission-mission"),
+  getById: (id) => apiClient.get(`/api/open/vission-mission/${id}`),
 };
 export const testimonialApi = {
   getAll: () => apiClient.get("/api/open/testimonials"),
@@ -39,5 +39,5 @@ export const testimonialApi = {
 };
 export const projectApi = {
   getAll: () => apiClient.get("/api/open/projects/public"),
-  getById: (id) => apiClient.get(`/api/projects/${id}`),
+  getById: (id) => apiClient.get(`/api/open/projects/${id}`),
 };

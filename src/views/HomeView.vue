@@ -342,7 +342,7 @@
           <h2 class="heading-lg" id="testimonials-heading">
             What Our Clients Say
           </h2>
-          <p class="body-lg section-sub">Feedback from clients</p>
+          <p class="body-lg section-sub">Feedback from our clients</p>
         </div>
 
         <!-- Loading State -->

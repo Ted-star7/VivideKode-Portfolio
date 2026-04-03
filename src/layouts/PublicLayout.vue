@@ -87,9 +87,9 @@
             </RouterLink>
             <p class="footer__tagline">Building intelligent digital solutions for ambitious businesses across Africa and beyond.</p>
             <address class="footer__contact" style="font-style:normal">
-              <a href="mailto:hello@vividkode.dev" class="footer__contact-link">hello@vividkode.dev</a>
-              <a href="tel:+254700123456" class="footer__contact-link">+254 700 123 456</a>
-              <span class="footer__contact-link">Westlands, Nairobi, Kenya</span>
+              <a href="mailto:vividkode@gmail.com" class="footer__contact-link">vividkode@gmail.com</a>
+              <a href="tel:+254705171490" class="footer__contact-link">+254 705 171 490</a>
+              <span class="footer__contact-link">Nairobi, Kenya</span>
             </address>
             <!-- Socials -->
             <div class="footer__socials" aria-label="Social media links">
@@ -253,10 +253,10 @@ const footerCols = [
   {
     title: 'Contact',
     items: [
-      { label: 'hello@vividkode.dev' },
-      { label: '+254 700 123 456'    },
+      { label: 'vividkode@gmail.com' },
+      { label: '+254 705 171 490'    },
       { label: 'Mon–Fri, 8am–6pm EAT' },
-      { label: 'Westlands, Nairobi'  },
+      { label: 'Nairobi, Kenya'  },
     ]
   }
 ]
