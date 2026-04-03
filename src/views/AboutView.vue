@@ -147,11 +147,47 @@ const values = [
   { icon:'🔒', title:'Security',    desc:'Security is never an afterthought. We engineer it into every layer of every system we build.' },
   { icon:'🌍', title:'Impact',      desc:'We build technology that creates measurable value for businesses and the people they ultimately serve.' },
 ]
+// const team = [
+//   { name:'Alex Mwangi',   initials:'AM', role:'Founder & Lead Engineer',  bio:'10+ years in full-stack and distributed systems architecture.', bg:'linear-gradient(135deg,#1B3A5C,#234B78)', skills:['Vue 3','Node.js','System Design'] },
+//   { name:'Naomi Wanjiku', initials:'NW', role:'Head of Data Science',      bio:'ML & statistical modelling specialist. Previously at Google Brain.', bg:'linear-gradient(135deg,#A8882E,#C9A84C)', skills:['Python','TensorFlow','dbt'] },
+//   { name:'James Otieno',  initials:'JO', role:'Senior AI Engineer',        bio:'Production ML systems, NLP, and LLM integrations at scale.', bg:'linear-gradient(135deg,#1B3A5C,#234B78)', skills:['PyTorch','LangChain','FastAPI'] },
+
+// ]
+
 const team = [
-  { name:'Alex Mwangi',   initials:'AM', role:'Founder & Lead Engineer',  bio:'10+ years in full-stack and distributed systems architecture.', bg:'linear-gradient(135deg,#1B3A5C,#234B78)', skills:['Vue 3','Node.js','System Design'] },
-  { name:'Naomi Wanjiku', initials:'NW', role:'Head of Data Science',      bio:'ML & statistical modelling specialist. Previously at Google Brain.', bg:'linear-gradient(135deg,#A8882E,#C9A84C)', skills:['Python','TensorFlow','dbt'] },
-  { name:'James Otieno',  initials:'JO', role:'Senior AI Engineer',        bio:'Production ML systems, NLP, and LLM integrations at scale.', bg:'linear-gradient(135deg,#1B3A5C,#234B78)', skills:['PyTorch','LangChain','FastAPI'] },
-  { name:'Faith Njeri',   initials:'FN', role:'UX & Frontend Lead',        bio:'Crafting interfaces users love since 2018. Design systems advocate.', bg:'linear-gradient(135deg,#A8882E,#C9A84C)', skills:['Figma','React','Tailwind'] },
+   {
+    name: 'Baraka Rayson',
+    initials: 'BR',
+    role: 'Backend Engineer',
+    bio: 'Focused on building reliable and scalable backend systems, APIs, and services that power modern applications.',
+    bg: 'linear-gradient(135deg,#A8882E,#C9A84C)',
+    skills: ['Springboot', 'API Development', 'Databases', 'System Architecture']
+  },
+  {
+    name: 'Teddy Kibuthu',
+    initials: 'TK',
+    role: 'Data Scientist & Software Developer',
+    bio: 'Specializing in data science, software development, and intelligent systems. Passionate about building scalable platforms and data-driven solutions.',
+    bg: 'linear-gradient(135deg,#1B3A5C,#234B78)',
+    skills: ['Python', 'Data Science', 'Machine Learning', 'Software Development']
+  },
+ 
+  {
+    name: 'Mark Chira',
+    initials: 'MC',
+    role: 'Backend & Cloud Engineer',
+    bio: 'Experienced in backend infrastructure and cloud deployments, ensuring systems are scalable, secure, and highly available.',
+    bg: 'linear-gradient(135deg,#1B3A5C,#234B78)',
+    skills: ['Cloud','Springboot', 'Docker', 'Kubernetes', 'Backend Engineering']
+  },
+  {
+    name: 'Maggie',
+    initials: 'MG',
+    role: 'Software Developer ',
+    bio: 'Specializes in Software Development, building and deploying applications that drive business value.',
+    bg: 'linear-gradient(135deg,#A8882E,#C9A84C)',
+    skills: ['Node', 'TypeScript', 'JavaScript', 'Software Development']
+  }
 ]
 
 onMounted(async () => {
@@ -193,7 +229,7 @@ onMounted(async () => {
 
 <style scoped>
 .page-hero { background: linear-gradient(165deg,var(--navy-dark),var(--navy)); padding: calc(var(--nav-h) + 4rem) 1.5rem 5rem; }
-.page-hero__inner { }
+/* .page-hero__inner { } */
 .story-layout { display:grid; grid-template-columns:1fr 1fr; gap:5rem; align-items:center; }
 .stack-pills  { display:flex; flex-wrap:wrap; gap:0.4rem; }
 .orbit-visual { position:relative; aspect-ratio:1; max-width:420px; margin:auto; }
