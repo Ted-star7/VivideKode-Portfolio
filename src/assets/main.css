@@ -172,7 +172,12 @@
   .section { padding: 6rem 1.5rem; }
   .section-sm { padding: 4rem 1.5rem; }
   .section-lg { padding: 8rem 1.5rem; }
-  .container { max-width: 1200px; margin: 0 auto; }
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding-left: max(1rem, env(safe-area-inset-left));
+    padding-right: max(1rem, env(safe-area-inset-right));
+  }
   .container-sm { max-width: 900px; margin: 0 auto; }
 
   /* Section labels */

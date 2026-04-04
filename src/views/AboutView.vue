@@ -116,10 +116,9 @@
         </div>
 
         <!-- MVV Cards -->
-        <div v-else class="mvv-grid">
+        <div v-else class="mvv-grid" ref="mvvGrid">
           <div
             class="mvv-card vk-card"
-            ref="setMvvCardRef"
             v-for="(item, idx) in mvvItems"
             :key="item.tag"
           >
@@ -229,7 +228,7 @@ const { heroSequence, staggerReveal, scrollReveal, slideIn } = useGsap();
 const heroText = ref(null);
 const storyLeft = ref(null);
 const storyRight = ref(null);
-const mvvCardRefs = ref([]);
+const mvvGrid = ref(null);
 const valuesHeader = ref(null);
 const valuesGrid = ref(null);
 const teamHeader = ref(null);
@@ -254,19 +253,11 @@ const mvvItems = computed(() => [
   },
 ]);
 
-// Function to collect MVV card refs
-function setMvvCardRef(el) {
-  if (el) {
-    mvvCardRefs.value.push(el);
-  }
-}
-
 // Handle retry
 async function handleRetry() {
   await store.fetchVisionMission();
-  // Re-run animations after data loads
-  if (!store.isLoading && !store.error && mvvCardRefs.value.length > 0) {
-    staggerReveal(mvvCardRefs.value, { y: 40, stagger: 0.15 });
+  if (!store.isLoading && !store.error && mvvGrid.value?.children?.length) {
+    staggerReveal([...mvvGrid.value.children], { y: 40, stagger: 0.15 });
   }
 }
 
@@ -406,9 +397,8 @@ onMounted(async () => {
   slideIn(storyLeft.value, "left");
   slideIn(storyRight.value, "right");
 
-  // MVV cards animation - only if not in loading/error state and data is loaded
-  if (!store.isLoading && !store.error && mvvCardRefs.value.length > 0) {
-    staggerReveal(mvvCardRefs.value, { y: 40, stagger: 0.15 });
+  if (!store.isLoading && !store.error && mvvGrid.value?.children?.length) {
+    staggerReveal([...mvvGrid.value.children], { y: 40, stagger: 0.15 });
   }
 
   // Values section animations

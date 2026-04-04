@@ -389,11 +389,12 @@
           </button>
 
           <div class="carousel-container" ref="carouselContainer">
-            <div class="carousel-track" :style="trackStyle">
+            <div class="carousel-track" :style="carouselTrackStyle">
               <div
                 v-for="(t, idx) in testimonials"
                 :key="t.id || idx"
                 class="testi-card-wrapper"
+                :style="testiWrapperStyle()"
               >
                 <div class="testi-card">
                   <!-- Quote Icon -->
@@ -573,12 +574,12 @@ const testimonialsError = ref(null);
 const currentIndex = ref(0);
 const slidesToShow = ref(3);
 
-//  stats
+// Hero stats — four distinct dimensions (avoid duplicate counts / duplicate “100%” metrics)
 const stats = [
-  { num: "30+", label: "Projects Delivered", raw: 45 },
-  { num: "100%", label: "Completion Rate", raw: 100 },
-  { num: "5+", label: "Years Expertise", raw: 5 },
-  { num: "30+", label: "Happy Clients", raw: 30 },
+  { num: "30+", label: "Projects delivered", raw: 30 },
+  { num: "5+", label: "Years expertise", raw: 5 },
+  { num: "98%", label: "Client satisfaction", raw: 98 },
+  { num: "12+", label: "Industries served", raw: 12 },
 ];
 
 const services = [
@@ -649,21 +650,28 @@ const process = [
 ];
 
 const results = [
-  { val: "100%", label: "Project Completion Rate" },
-  { val: "30+", label: "Successful Projects" },
-  { val: "100%", label: "On-Time Delivery" },
-  { val: "30+", label: "Happy Clients Served" },
+  { val: "<24h", label: "Median first response" },
+  { val: "95%", label: "On-time delivery" },
+  { val: "50+", label: "Technologies in production" },
 ];
 
 const featuredProjects = computed(() => portfolio.projects.slice(0, 3));
 
-// Carousel computed properties
-const trackStyle = computed(() => {
-  const slideWidth = 100 / slidesToShow.value;
+// Carousel: track width & transform are % of the track so the strip does not overflow the viewport
+const carouselTrackStyle = computed(() => {
+  const n = Math.max(testimonials.value.length, 1);
+  const s = slidesToShow.value;
   return {
-    transform: `translateX(-${currentIndex.value * slideWidth}%)`,
+    width: `${(n / s) * 100}%`,
+    transform: `translateX(-${(currentIndex.value / n) * 100}%)`,
+    transition: "transform 0.5s cubic-bezier(0.4, 0, 0.2, 1)",
   };
 });
+
+function testiWrapperStyle() {
+  const n = Math.max(testimonials.value.length, 1);
+  return { flex: `0 0 calc(100% / ${n})` };
+}
 
 const totalDots = computed(() => {
   return Math.ceil(testimonials.value.length / slidesToShow.value);
@@ -914,6 +922,13 @@ onUnmounted(() => {
 </script>
 
 <style scoped>
+/* Prevent horizontal scroll from carousels / full-bleed sections */
+.home {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: clip;
+}
+
 /* ── Hero ─────────────────────────────────────────────────── */
 .hero {
   min-height: 100vh;
@@ -1434,7 +1449,7 @@ onUnmounted(() => {
 }
 .results-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   gap: 1.5rem;
 }
 .result-item {
@@ -1561,16 +1576,17 @@ onUnmounted(() => {
 }
 .carousel-container {
   flex: 1;
+  min-width: 0;
   overflow: hidden;
 }
 .carousel-track {
   display: flex;
-  transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
   will-change: transform;
 }
 .testi-card-wrapper {
-  flex: 0 0 calc(100% / 3);
-  padding: 0 1rem;
+  box-sizing: border-box;
+  min-width: 0;
+  padding: 0 0.75rem;
 }
 .testi-card {
   background: var(--white);
@@ -1625,6 +1641,8 @@ onUnmounted(() => {
   position: relative;
   z-index: 1;
   font-style: italic;
+  overflow-wrap: anywhere;
+  word-break: break-word;
 }
 .testi-card__author {
   display: flex;
@@ -1779,16 +1797,16 @@ onUnmounted(() => {
   .work-grid {
     grid-template-columns: repeat(2, 1fr);
   }
-  .testi-card-wrapper {
-    flex: 0 0 calc(100% / 2);
-  }
 }
 @media (max-width: 768px) {
   .hero__ctas {
     flex-direction: column;
   }
   .hero__stats {
-    gap: 1.5rem;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.25rem 1rem;
+    max-width: 22rem;
   }
   .process-grid {
     grid-template-columns: 1fr 1fr;
@@ -1798,9 +1816,6 @@ onUnmounted(() => {
   }
   .work-grid {
     grid-template-columns: 1fr;
-  }
-  .testi-card-wrapper {
-    flex: 0 0 100%;
   }
   .cta-banner__inner {
     grid-template-columns: 1fr;
@@ -1835,8 +1850,13 @@ onUnmounted(() => {
   .process-grid {
     grid-template-columns: 1fr;
   }
-  .results-grid {
+  .hero__stats {
     grid-template-columns: 1fr 1fr;
+    max-width: none;
+  }
+  .results-grid {
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
   }
   .carousel-nav-btn {
     width: 36px;

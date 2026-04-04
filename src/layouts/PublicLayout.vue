@@ -49,6 +49,16 @@
         </div>
       </div>
 
+      <!-- Dim background when mobile menu is open -->
+      <Transition name="mobile-backdrop">
+        <div
+          v-if="mobileOpen"
+          class="mobile-nav-backdrop"
+          aria-hidden="true"
+          @click="mobileOpen = false"
+        />
+      </Transition>
+
       <!-- Mobile drawer -->
       <Transition name="mobile-drawer">
         <nav v-if="mobileOpen" class="mobile-nav" role="navigation" aria-label="Mobile navigation" @click="mobileOpen = false">
@@ -275,6 +285,11 @@ watch(() => chat.history.length, async () => {
 
 watch(route, () => { mobileOpen.value = false })
 
+watch(mobileOpen, (open) => {
+  if (typeof document === 'undefined') return
+  document.body.style.overflow = open ? 'hidden' : ''
+})
+
 onMounted(() => {
   window.addEventListener('scroll', onScroll, { passive: true })
   chat.connect()
@@ -282,6 +297,7 @@ onMounted(() => {
 onUnmounted(() => {
   window.removeEventListener('scroll', onScroll)
   chat.disconnect()
+  document.body.style.overflow = ''
 })
 </script>
 
@@ -378,9 +394,31 @@ onUnmounted(() => {
 .hamburger.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
 .hamburger.open span:nth-child(3) { transform: rotate(-45deg) translate(5px,-5px); }
 
+/* Hero / transparent navbar: hamburger must stay visible on dark background */
+.navbar:not(.navbar--scrolled):not(.navbar--solid) .hamburger span { background: #fff; }
+.navbar:not(.navbar--scrolled):not(.navbar--solid) .hamburger:hover { background: rgba(255,255,255,0.12); }
+
+/* Mobile drawer backdrop */
+.mobile-nav-backdrop {
+  position: fixed;
+  inset: 0;
+  top: var(--nav-h);
+  z-index: 898;
+  background: rgba(18, 40, 64, 0.45);
+  backdrop-filter: blur(2px);
+}
+.mobile-backdrop-enter-active,
+.mobile-backdrop-leave-active { transition: opacity 0.2s ease; }
+.mobile-backdrop-enter-from,
+.mobile-backdrop-leave-to { opacity: 0; }
+
 /* Mobile drawer */
 .mobile-nav {
   position: absolute; top: 100%; left: 0; right: 0;
+  z-index: 901;
+  max-height: min(70vh, calc(100dvh - var(--nav-h)));
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
   background: rgba(255,255,255,0.99);
   backdrop-filter: blur(20px);
   border-bottom: 1px solid var(--border);
@@ -402,16 +440,30 @@ onUnmounted(() => {
 .site-footer {
   background: var(--navy);
   color: rgba(255,255,255,0.85);
-  padding: 5rem 1.5rem 0;
+  padding: clamp(3rem, 8vw, 5rem) clamp(1rem, 4vw, 1.5rem) 0;
+  overflow-x: clip;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
 }
-.footer__inner 
-.footer__grid {
+.footer__inner {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+.footer__inner .footer__grid {
   display: grid;
   grid-template-columns: 1fr 2fr;
-  gap: 4rem;
-  padding-bottom: 4rem;
+  gap: clamp(2rem, 5vw, 4rem);
+  padding-bottom: clamp(2.5rem, 6vw, 4rem);
+  min-width: 0;
 }
-.footer__brand { display: flex; flex-direction: column; gap: 1.25rem; }
+.footer__brand {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  min-width: 0;
+}
 .footer__logo {
   display: inline-flex; align-items: center; gap: 0.65rem;
   text-decoration: none;
@@ -443,7 +495,13 @@ onUnmounted(() => {
 }
 .social-btn:hover { background: rgba(201,168,76,0.18); border-color: rgba(201,168,76,0.4); color: var(--gold-light); }
 
-.footer__links-wrap { display: grid; grid-template-columns: repeat(3,1fr); gap: 2rem; }
+.footer__links-wrap {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(1.25rem, 4vw, 2rem);
+  min-width: 0;
+}
+.footer__col { min-width: 0; }
 .footer__col-title {
   font-family: 'DM Mono', monospace;
   font-size: 0.65rem; letter-spacing: 0.18em; text-transform: uppercase;
@@ -460,10 +518,19 @@ onUnmounted(() => {
 .footer__divider { background: rgba(255,255,255,0.1); }
 .footer__bottom {
   display: flex; align-items: center; justify-content: space-between;
-  padding: 1.5rem 0; gap: 1rem; flex-wrap: wrap;
+  padding: 1.5rem 0 clamp(1.5rem, 4vw, 2rem); gap: 1rem; flex-wrap: wrap;
 }
-.footer__copy { font-size: 0.8rem; color: rgba(255,255,255,0.45); }
-.footer__legal { display: flex; gap: 1.5rem; }
+.footer__copy {
+  font-size: 0.8rem;
+  color: rgba(255,255,255,0.45);
+  max-width: 100%;
+  line-height: 1.5;
+}
+.footer__legal {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem 1.5rem;
+}
 .footer__legal-link { font-size: 0.8rem; color: rgba(255,255,255,0.45); text-decoration: none; transition: color 0.18s; }
 .footer__legal-link:hover { color: var(--gold-light); }
 
@@ -571,17 +638,27 @@ onUnmounted(() => {
 
 /* ── Responsive ───────────────────────────────────────────── */
 @media (max-width: 900px) {
-  .footer__grid        { grid-template-columns: 1fr; gap: 3rem; }
-  .footer__links-wrap  { grid-template-columns: repeat(2,1fr); gap: 2rem; }
+  .footer__inner .footer__grid { grid-template-columns: 1fr; gap: 2.5rem; }
+  .footer__links-wrap { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+/* Tablet + mobile: primary navigation in drawer (hamburger) */
+@media (max-width: 1024px) {
+  .navbar__nav,
+  .navbar__actions .btn-navy { display: none; }
+  .hamburger { display: flex; }
+  .navbar__inner { padding: 0 1rem; gap: 1rem; }
 }
 @media (max-width: 768px) {
-  .navbar__nav, .navbar__actions .btn-navy { display: none; }
-  .hamburger { display: flex; }
-  .chat-box  { width: 300px; }
+  .chat-box  { width: min(100vw - 2rem, 300px); }
 }
 @media (max-width: 480px) {
   .footer__links-wrap { grid-template-columns: 1fr; }
-  .footer__bottom { flex-direction: column; align-items: flex-start; }
-  .chat-widget { bottom: 1rem; right: 1rem; }
+  .footer__bottom {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1.25rem;
+  }
+  .footer__legal { width: 100%; flex-direction: column; align-items: flex-start; }
+  .chat-widget { bottom: 1rem; right: 1rem; max-width: calc(100vw - 2rem); }
 }
 </style>
