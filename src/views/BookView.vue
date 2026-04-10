@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="booking-page">
     <!-- Page Hero -->
     <section class="page-hero">
       <div class="container page-hero__inner">
@@ -426,6 +426,7 @@ onMounted(() => {
 </script>
 
 <style scoped>
+/* Base styles - Keep original styling */
 .page-hero {
   background: linear-gradient(165deg, var(--navy-dark), var(--navy));
   padding: calc(var(--nav-h) + 4rem) 1.5rem 5rem;
@@ -719,19 +720,218 @@ form {
   cursor: not-allowed;
 }
 
-/* Responsive */
+/* Modal transitions */
+.modal-enter-active,
+.modal-leave-active {
+  transition:
+    opacity 0.3s ease,
+    transform 0.3s ease;
+}
+
+.modal-enter-from,
+.modal-leave-to {
+  opacity: 0;
+  transform: scale(0.95);
+}
+
+/* ============================================
+   RESPONSIVE STYLES - NO HORIZONTAL SCROLL
+   ============================================ */
+
+/* Tablet Portrait */
 @media (max-width: 960px) {
   .book-layout {
     grid-template-columns: 1fr;
+    gap: 2rem;
   }
-  .form-row {
-    grid-template-columns: 1fr;
+
+  .page-hero {
+    padding: calc(var(--nav-h) + 3rem) 1.5rem 4rem;
+  }
+
+  .book-info {
+    max-width: 500px;
+    margin: 0 auto;
+    width: 100%;
   }
 }
 
+/* Mobile Landscape */
 @media (max-width: 768px) {
+  .page-hero {
+    padding: calc(var(--nav-h) + 2rem) 1rem 3rem;
+  }
+
   .form-card {
     padding: 1.5rem;
+  }
+
+  .info-card {
+    padding: 1.25rem;
+  }
+
+  .form-row {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .form-footer {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1rem;
+  }
+
+  .form-footer button {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .form-note {
+    text-align: center;
+  }
+
+  .success-state {
+    padding: 2rem 1rem;
+  }
+
+  .success-state__title {
+    font-size: 1.25rem;
+  }
+}
+
+/* Mobile Portrait */
+@media (max-width: 480px) {
+  .page-hero {
+    padding: calc(var(--nav-h) + 1.5rem) 1rem 2.5rem;
+  }
+
+  .page-hero h1 {
+    font-size: 1.75rem;
+  }
+
+  .form-card {
+    padding: 1.25rem;
+  }
+
+  .info-card {
+    padding: 1rem;
+  }
+
+  .step-item {
+    gap: 0.75rem;
+  }
+
+  .step-item__num {
+    width: 24px;
+    height: 24px;
+    font-size: 0.65rem;
+  }
+
+  .contact-row {
+    gap: 0.75rem;
+  }
+
+  .contact-row__icon {
+    width: 36px;
+    height: 36px;
+    font-size: 0.9rem;
+  }
+
+  .guarantee-box {
+    padding: 1rem;
+  }
+
+  .form-field input,
+  .form-field select,
+  .form-field textarea {
+    font-size: 16px;
+  }
+
+  .success-state__actions {
+    flex-direction: column;
+  }
+
+  .success-state__actions .btn {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+/* Small Mobile */
+@media (max-width: 380px) {
+  .page-hero h1 {
+    font-size: 1.5rem;
+  }
+
+  .step-item {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 0.5rem;
+  }
+
+  .step-item__num {
+    margin: 0 auto;
+  }
+
+  .contact-row {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 0.5rem;
+  }
+
+  .contact-row__icon {
+    margin: 0 auto;
+  }
+
+  .contact-row__label {
+    text-align: center;
+  }
+
+  .guarantee-box {
+    flex-direction: column;
+    text-align: center;
+    align-items: center;
+  }
+}
+
+/* Landscape orientation */
+@media (max-width: 768px) and (orientation: landscape) {
+  .page-hero {
+    padding: calc(var(--nav-h) + 1rem) 1rem 2rem;
+  }
+
+  .steps-list {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+  }
+}
+
+/* Touch-friendly */
+@media (hover: none) and (pointer: coarse) {
+  .contact-row__val--link,
+  .btn-navy,
+  .btn-outline-navy {
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  select {
+    min-height: 44px;
+  }
+}
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  .modal-enter-active,
+  .modal-leave-active,
+  .spinner {
+    transition: none;
+    animation: none;
   }
 }
 </style>
