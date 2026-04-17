@@ -437,6 +437,9 @@ onMounted(() => {
   grid-template-columns: 360px 1fr;
   gap: 2.5rem;
   align-items: start;
+  overflow-x: hidden;
+  width: 100%;
+  min-width: 0;
 }
 
 .book-info {
@@ -743,6 +746,8 @@ form {
   .book-layout {
     grid-template-columns: 1fr;
     gap: 2rem;
+    width: 100%;
+    overflow-x: hidden;
   }
 
   .page-hero {

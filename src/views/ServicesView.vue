@@ -459,6 +459,9 @@ onMounted(() => {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
   gap: 1.5rem;
+  overflow-x: hidden;
+  width: 100%;
+  min-width: 0;
 }
 
 .svc-detail-card {
